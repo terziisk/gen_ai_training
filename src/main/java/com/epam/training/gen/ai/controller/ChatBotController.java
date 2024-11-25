@@ -2,6 +2,7 @@ package com.epam.training.gen.ai.controller;
 
 import java.util.List;
 
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Validated
 @RestController
 @RequiredArgsConstructor
 public class ChatBotController {
@@ -30,7 +32,7 @@ public class ChatBotController {
    */
   @PostMapping("/analyze")
   public AiResponse processSemanticAnalysis(@RequestBody final UserRequest request) {
-    final String response = computationService.processInputHistorically(request.input());
+    final String response = computationService.processInputHistorically(request.getInput(), request.getTemperature());
     return new AiResponse(List.of(response));
   }
 

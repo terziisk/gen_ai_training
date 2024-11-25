@@ -13,4 +13,6 @@ public class AppProperties {
   private String clientAzureopenaiKey;
   private String clientAzureopenaiEndpoint;
   private String clientAzureopenaiDeploymentName;
+  private Integer aiRequestMaxTokens;
+  private Double aiDefaultTemperature;
 }

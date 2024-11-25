@@ -59,10 +59,51 @@ The AI Chat Bot Service contains two main endpoints that facilitate user interac
   ```bash
   curl -X POST http://localhost:8090/chat \
     -H 'Content-Type: application/json' \
-    -d '{"input": "I want to find top-10 books about world history"}'
+    -d '{"input": "I want to find top-10 books about world history"}' ```
 ### Expected Response
 
 ```json
 {
   "messages": ["Here is a list of the top 10 books about world history:\n\n1. **\"A History of the World in 100 Objects\" by Neil MacGregor**\n   - This book provides a unique perspective on world history through the examination of 100 objects from different cultures and eras.\n\n2. **\"Guns, Germs, and Steel: The Fates of Human Societies\" by Jared Diamond**\n   - This book explores the different factors that have influenced the fates of different societies throughout history, including geography and environmental factors.\n\n3. **\"Sapiens: A Brief History of Humankind\" by Yuval Noah Harari**\n   - A popular and engaging look at the history of our species from the emergence of Homo sapiens in Africa to the present.\n\n4. **\"The Silk Roads: A New History of the World\" by Peter Frankopan**\n   - This book shifts the focus from the Western world to the East, telling the story of the importance of the silk roads throughout history.\n\n5. **\"The History of the Ancient World: From the Earliest Accounts to the Fall of Rome\" by Susan Wise Bauer**\n   - Offering a comprehensive overview of the ancient world, this book covers civilizations from Sumer to the Roman Empire.\n\n6. **\"The Story of Civilization\" by Will Durant**\n   - An extensive eleven-volume set that covers a broad spectrum of history including philosophy, religion, and the socio-economic forces that shaped the world.\n\n7. **\"The History of the World\" by J.M. Roberts**\n   - A comprehensive and detailed analysis that spans from prehistoric times to the modern day.\n\n8. **\"A People’s History of the World\" by Chris Harman**\n   - This book offers a perspective on world history from the standpoint of ordinary people rather than political leaders.\n\n9. **\"The Penguin History of the World\" by J.M. Roberts and Odd Arne Westad**\n   - Another thorough exploration of world history that has been regularly updated to include modern developments.\n\n10. **\"The Story of the World: History for the Classical Child\" by Susan Wise Bauer**\n    - A four-volume series that presents world history in a narrative format, making it accessible and interesting for younger readers (but engaging enough for adults as well!).\n\nThese books offer a variety of perspectives and methods for understanding world history, so you might choose based on what approach best suits your interests."]
-}
+} ```
+
+
+## Testing Dialogue Context Preservation with `ChatHistory`
+
+### Objective
+Verify that `ChatHistory` maintains conversational context effectively across multiple exchanges.
+
+### Test Setup
+
+Execute the series of API requests below and analyze the responses to ensure the chatbot recalls previously given information (like a user's name) later in the conversation.
+
+#### Step 1: Initial Introduction
+- **Request**:
+  ```json
+  {
+    "input": "Hi, my name is Artem",
+    "temperature": "1.0"
+  } ```
+
+#### Step 2: Unrelated Follow-Up
+- **Request**:
+  ```json
+  {
+    "input": "What is the weather?"
+  } ```
+
+#### Step 3: Context Recall
+- **Request**:
+  ```json
+  {
+    "input": "What is my name?"
+  } ```
+
+#### Expected Response:
+- **Request**:
+  ```json
+  {
+    "messages": [
+      "Your name is Artem."
+    ]
+  } ```
