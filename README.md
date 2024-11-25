@@ -18,7 +18,7 @@ The AI Chat Bot Service contains two main endpoints that facilitate user interac
 - **Description**: This endpoint processes user inputs using semantic analysis by leveraging historical chat data. It's suitable for applications requiring context-aware conversational AI.
 
 - **Usage**:
-  - **URL**: `http://localhost:8080/analyze`
+  - **URL**: `http://localhost:8090/analyze`
   - **Method**: POST
   - **Body**:
     ```json
@@ -29,7 +29,7 @@ The AI Chat Bot Service contains two main endpoints that facilitate user interac
 
 - **cURL Example**:
   ```bash
-  curl -X POST http://localhost:8080/ai/analyze \
+  curl -X POST http://localhost:8090/analyze \
     -H 'Content-Type: application/json' \
     -d '{"input": "I want to find top-10 books about world history"}'
 ### Expected Response
@@ -46,7 +46,7 @@ The AI Chat Bot Service contains two main endpoints that facilitate user interac
 - **Description**: Utilizes OpenAI's language models to generate real-time chat completions and dynamic responses.
 
 - **Usage**:
-  - **URL**: `http://localhost:8080/chat`
+  - **URL**: `http://localhost:8090/chat`
   - **Method**: POST
   - **Body**:
     ```json
@@ -57,7 +57,7 @@ The AI Chat Bot Service contains two main endpoints that facilitate user interac
 
 - **cURL Example**:
   ```bash
-  curl -X POST http://localhost:8080/chat \
+  curl -X POST http://localhost:8090/chat \
     -H 'Content-Type: application/json' \
     -d '{"input": "I want to find top-10 books about world history"}'
 ### Expected Response
