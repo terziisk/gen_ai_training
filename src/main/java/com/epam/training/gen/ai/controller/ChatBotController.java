@@ -13,9 +13,7 @@ import com.epam.training.gen.ai.service.KernelService;
 import com.epam.training.gen.ai.service.OpenAIService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Validated
 @RestController
 @RequiredArgsConstructor

@@ -1,7 +1,5 @@
 package com.epam.training.gen.ai.model;
 
-
-import java.util.Objects;
 import java.util.Optional;
 
 import javax.annotation.Nullable;
@@ -18,7 +16,7 @@ public final class UserRequest {
   @Nullable
   private final Double temperature;
 
-  @Nullable
+
   public Optional<Double> getTemperature() {
     return Optional.ofNullable(temperature);
   }
