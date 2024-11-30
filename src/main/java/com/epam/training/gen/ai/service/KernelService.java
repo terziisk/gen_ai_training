@@ -1,12 +1,16 @@
 package com.epam.training.gen.ai.service;
 
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
+import com.epam.training.gen.ai.config.AppProperties;
 import com.microsoft.semantickernel.Kernel;
 import com.microsoft.semantickernel.orchestration.FunctionResult;
 import com.microsoft.semantickernel.orchestration.InvocationContext;
 import com.microsoft.semantickernel.orchestration.InvocationReturnMode;
+import com.microsoft.semantickernel.orchestration.PromptExecutionSettings;
 import com.microsoft.semantickernel.orchestration.ToolCallBehavior;
 import com.microsoft.semantickernel.semanticfunctions.KernelFunction;
 import com.microsoft.semantickernel.semanticfunctions.KernelFunctionArguments;
@@ -25,13 +29,16 @@ public class KernelService {
 
   private final Kernel kernel;
   private final ChatHistory chatHistory;
+  private final AppProperties appProperties;
+
   /**
    * Processes user input using historical context and invokes the system kernel. Adds messages from both the user and the assistant to the chat history.
    *
-   * @param input User-supplied string to process.
+   * @param input       User-supplied string to process.
+   * @param temperature Optional temperature value for the prompt execution settings.
    * @return Processed response as a string containing the generated answer.
    */
-  public String processInputHistorically(final String input) {
+  public String processInputHistorically(final String input, final Optional<Double> temperature) {
     final InvocationContext context = new InvocationContext.Builder()
       .withReturnMode(InvocationReturnMode.LAST_MESSAGE_ONLY)
       .withToolCallBehavior(ToolCallBehavior.allowAllKernelFunctions(true))
@@ -40,6 +47,7 @@ public class KernelService {
     final FunctionResult<String> result = kernel.invokeAsync(createChatKernelFunction())
       .withArguments(defineKernelArguments(input, chatHistory))
       .withInvocationContext(context)
+      .withPromptExecutionSettings(initPromptSettings(temperature))
       .block();
 
     // Logging messages into chat history.
@@ -48,6 +56,13 @@ public class KernelService {
 
     log.info("Processed Response: {}", result.getResult());
     return result.getResult();
+  }
+
+  private PromptExecutionSettings initPromptSettings(final Optional<Double> temperature) {
+    return PromptExecutionSettings.builder()
+      .withTemperature(temperature.orElse(appProperties.getAiDefaultTemperature()))
+      .withMaxTokens(appProperties.getAiRequestMaxTokens())
+      .build();
   }
 
   /**
@@ -65,7 +80,7 @@ public class KernelService {
   /**
    * Defines the arguments for the kernel function based on the user input and the chat history.
    *
-   * @param input User's input string entered in the chat.
+   * @param input   User's input string entered in the chat.
    * @param history Chat history record.
    * @return KernelFunctionArguments object containing arguments for the kernel function.
    */
