@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.web.client.RestTemplate;
 
 import com.azure.ai.openai.OpenAIAsyncClient;
 import com.azure.ai.openai.OpenAIClientBuilder;
@@ -63,5 +64,10 @@ public class AiConfig {
   @Scope(scopeName = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
   public ChatHistory chatHistory() {
     return new ChatHistory();
+  }
+
+  @Bean
+  public RestTemplate restTemplate() {
+    return new RestTemplate();
   }
 }
