@@ -69,6 +69,72 @@ The AI Chat Bot Service contains two main endpoints that facilitate user interac
 }
 ```
 
+### 3. Get all DIAL models
+
+- **Endpoint**: `GET /models`
+- **Description**: Gets all the models available DIAL
+- **Usage**:
+  - **URL**: `http://localhost:8090/models`
+  - **Method**: GET
+
+- **cURL Example**:
+```bash
+    curl -X GET http://localhost:8090/models
+```
+### Expected Response
+```json
+{
+    [
+        "gpt-35-turbo",
+        "gpt-4",
+        "gpt-4-turbo",
+        "gpt-4o",
+        "amazon.titan-tg1-large",
+        "ai21.j2-jumbo-instruct",
+        "anthropic.claude-v3-haiku",
+        "stability.stable-diffusion-xl",
+        "Llama-3-8B-Instruct",
+        "Mistral-7B-Instruct",
+        "chat-bison@001",
+        "gemini-pro"
+        ...
+    ]
+}
+```
+
+### 4. Chat for different models
+
+- **Endpoint**: `POST /{modelId}/chat`
+- **Description**: Utilizes OpenAI's language models to generate real-time chat completions for chosen model and dynamic responses.
+
+- **Usage**:
+  - **URL**: `http://localhost:8090/gemini-pro/chat`
+  - **Method**: POST
+  - **Body**:
+```json
+    {
+      "input": "What is the weather in Odessa, Ukraine?",
+      "temperature":"1.0"
+    }
+```
+
+- **cURL Example**:
+  ```bash
+  curl -X POST http://localhost:8090/chat \
+    -H 'Content-Type: application/json' \
+    -d '{
+            "input": "What is the weather in Odessa, Ukraine?",
+            "temperature":"1.0"
+        }' ```
+### Expected Response
+
+```json
+{
+    "messages": [
+        "## Current weather in Odessa, Ukraine:\n\nAs of October 26, 2023, 11:00 PM PST:\n\n* **Temperature:** 11°C ..."
+    ]
+}
+```
 
 ## Testing Dialogue Context Preservation with `ChatHistory`
 
