@@ -43,12 +43,10 @@ public class AiConfig {
 
   @Bean
   public Kernel kernel(
-    final ChatCompletionService chatCompletionService,
-    final KernelPlugin kernelPlugin
+    final ChatCompletionService chatCompletionService
   ) {
     return Kernel.builder()
       .withAIService(ChatCompletionService.class, chatCompletionService)
-      .withPlugin(kernelPlugin)
       .build();
   }
 
