@@ -1,8 +1,9 @@
 package com.epam.training.gen.ai.service;
 
 
+import static java.util.stream.Collectors.toList;
+
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -49,7 +50,7 @@ public class OpenAIService {
   private List<String> getChatResponses(UserRequest request, ChatHistory history, String modelId) {
     try {
       history.addUserMessage(request.getInput());
-     final List<ChatRequestMessage> messages = convertToChatRequestMessages(history.getMessages());
+      final List<ChatRequestMessage> messages = convertToChatRequestMessages(history.getMessages());
 
       final var options = new ChatCompletionsOptions(messages);
       options.setTemperature(request.getTemperature().orElse(appProperties.getAiDefaultTemperature()));
@@ -74,6 +75,6 @@ public class OpenAIService {
     return contents.stream()
       .map(ChatMessageContent::getContent)
       .map(ChatRequestUserMessage::new)
-      .collect(Collectors.toList());
+      .collect(toList());
   }
 }

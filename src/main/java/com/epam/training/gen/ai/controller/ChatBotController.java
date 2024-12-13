@@ -54,7 +54,8 @@ public class ChatBotController {
   @PostMapping("/{modelId}/chat")
   public AiResponse generateChatResponse(
     @PathVariable final String modelId,
-    @Valid @RequestBody final UserRequest request) {
+    @Valid @RequestBody final UserRequest request
+  ) {
     final List<String> responses = interactionService.retrieveChat(request, modelId);
     return new AiResponse(responses);
   }

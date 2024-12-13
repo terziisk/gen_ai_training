@@ -9,11 +9,9 @@ import org.springframework.web.client.RestTemplate;
 import com.azure.ai.openai.OpenAIAsyncClient;
 import com.azure.ai.openai.OpenAIClientBuilder;
 import com.azure.core.credential.AzureKeyCredential;
-import com.epam.training.gen.ai.plugin.SimplePlugin;
 import com.microsoft.semantickernel.Kernel;
 import com.microsoft.semantickernel.aiservices.openai.chatcompletion.OpenAIChatCompletion;
 import com.microsoft.semantickernel.plugin.KernelPlugin;
-import com.microsoft.semantickernel.plugin.KernelPluginFactory;
 import com.microsoft.semantickernel.services.chatcompletion.ChatCompletionService;
 import com.microsoft.semantickernel.services.chatcompletion.ChatHistory;
 
@@ -41,12 +39,6 @@ public class AiConfig {
       .withModelId(appProperties.getClientAzureopenaiDeploymentName())
       .withOpenAIAsyncClient(openAIAsyncClient)
       .build();
-  }
-
-  @Bean
-  public KernelPlugin kernelPlugin() {
-    return KernelPluginFactory.createFromObject(
-      new SimplePlugin(), "SimplePlugin");
   }
 
   @Bean
