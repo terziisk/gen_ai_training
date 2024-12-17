@@ -179,3 +179,15 @@ Execute the series of API requests below and analyze the responses to ensure the
     ]
   }
   ```
+
+ #
+ # Plugins
+
+ ## StorePersonalDataPlugin
+ Plugin to store personal data gathered from user during conversation in the chat history.
+ Classify data type and store it as map [<data type>, <data>]
+
+ ## LightsPlugin
+ Plugin to control lights in the room. You can tun on, turn off, in specific spot or all.
+ And can get list with all available lights and their states.
+
