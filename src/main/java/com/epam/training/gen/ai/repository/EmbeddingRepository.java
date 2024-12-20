@@ -62,7 +62,6 @@ public class EmbeddingRepository {
     String[] elements = vectorString.split(",");
     float[] vector = new float[elements.length];
 
-    // Преобразование каждого элемента в float
     for (int i = 0; i < elements.length; i++) {
       vector[i] = Float.parseFloat(elements[i].trim());
     }
