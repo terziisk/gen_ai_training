@@ -9,11 +9,17 @@ import org.springframework.web.client.RestTemplate;
 import com.azure.ai.openai.OpenAIAsyncClient;
 import com.azure.ai.openai.OpenAIClientBuilder;
 import com.azure.core.credential.AzureKeyCredential;
+import com.azure.core.util.ClientOptions;
+import com.azure.core.util.MetricsOptions;
+import com.azure.core.util.TracingOptions;
+import com.azure.search.documents.indexes.SearchIndexAsyncClient;
+import com.azure.search.documents.indexes.SearchIndexClientBuilder;
 import com.epam.training.gen.ai.plugin.LightsPlugin;
 import com.epam.training.gen.ai.plugin.SimplePlugin;
 import com.epam.training.gen.ai.plugin.StorePersonalDataPlugin;
 import com.microsoft.semantickernel.Kernel;
 import com.microsoft.semantickernel.aiservices.openai.chatcompletion.OpenAIChatCompletion;
+import com.microsoft.semantickernel.aiservices.openai.textembedding.OpenAITextEmbeddingGenerationService;
 import com.microsoft.semantickernel.plugin.KernelPlugin;
 import com.microsoft.semantickernel.plugin.KernelPluginFactory;
 import com.microsoft.semantickernel.services.chatcompletion.ChatCompletionService;
@@ -25,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AiConfig {
 
+  public static final int EMBEDDING_DIMENSIONS = 1536;
   private final AppProperties appProperties;
 
   @Bean
@@ -35,6 +42,32 @@ public class AiConfig {
       .buildAsyncClient();
   }
 
+  @Bean
+  public OpenAITextEmbeddingGenerationService openAITextEmbeddingGenerationService(
+    final OpenAIAsyncClient client
+  ) {
+    return OpenAITextEmbeddingGenerationService.builder()
+      .withOpenAIAsyncClient(client)
+      .withModelId(appProperties.getClientEmbeddedModelId())
+      .withDimensions(EMBEDDING_DIMENSIONS)
+      .build();
+  }
+
+  @Bean
+  public SearchIndexAsyncClient searchIndexClientBuilder() {
+    return  new SearchIndexClientBuilder()
+      .endpoint(appProperties.getClientAzureopenaiEndpoint())
+      .credential(new AzureKeyCredential(appProperties.getClientAzureopenaiKey()))
+      .clientOptions(clientOptions())
+      .buildAsyncClient();
+  }
+
+  private static ClientOptions clientOptions() {
+    return new ClientOptions()
+      .setTracingOptions(new TracingOptions())
+      .setMetricsOptions(new MetricsOptions())
+      .setApplicationId("Semantic-Kernel");
+  }
   @Bean
   public ChatCompletionService chatCompletionService(
     final OpenAIAsyncClient openAIAsyncClient
