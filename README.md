@@ -191,3 +191,37 @@ Execute the series of API requests below and analyze the responses to ensure the
  Plugin to control lights in the room. You can tun on, turn off, in specific spot or all.
  And can get list with all available lights and their states.
 
+
+## Steps for install PostgreSQL with PGVector (required for embeddings store)
+
+- Go to directory where compose.yml is located using terminal
+- run commands:
+```bash
+  docker-compose down
+  docker-compose up --build
+  ```
+- doker image should be on place with already executed script
+- container should be up and running
+- connect to DB to ensure that configuration
+### Verify the Setup
+Connect to PostgreSQL:
+```bash
+docker exec -it pgvector-db psql -U postgres -d example_db
+  ```
+Check if everything is set up correctly:
+```
+-- Check installed extensions
+\dx
+
+-- Check table creation
+\dt
+
+-- Check table structure
+\d items
+  ```
+### Now you can connect using DBeaver ar any other DB tool and enjoy
+  Host: localhost
+  Port: 5437
+  Database: example_db
+  User: postgres
+  Password: password
