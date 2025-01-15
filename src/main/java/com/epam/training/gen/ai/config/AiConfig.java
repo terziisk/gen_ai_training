@@ -15,6 +15,7 @@ import com.azure.core.util.TracingOptions;
 import com.azure.search.documents.indexes.SearchIndexAsyncClient;
 import com.azure.search.documents.indexes.SearchIndexClientBuilder;
 import com.epam.training.gen.ai.plugin.LightsPlugin;
+import com.epam.training.gen.ai.plugin.SearchPlugin;
 import com.epam.training.gen.ai.plugin.SimplePlugin;
 import com.epam.training.gen.ai.plugin.StorePersonalDataPlugin;
 import com.microsoft.semantickernel.Kernel;
@@ -55,7 +56,7 @@ public class AiConfig {
 
   @Bean
   public SearchIndexAsyncClient searchIndexClientBuilder() {
-    return  new SearchIndexClientBuilder()
+    return new SearchIndexClientBuilder()
       .endpoint(appProperties.getClientAzureopenaiEndpoint())
       .credential(new AzureKeyCredential(appProperties.getClientAzureopenaiKey()))
       .clientOptions(clientOptions())
@@ -68,6 +69,7 @@ public class AiConfig {
       .setMetricsOptions(new MetricsOptions())
       .setApplicationId("Semantic-Kernel");
   }
+
   @Bean
   public ChatCompletionService chatCompletionService(
     final OpenAIAsyncClient openAIAsyncClient
@@ -94,17 +96,24 @@ public class AiConfig {
   }
 
   @Bean
+  public KernelPlugin kernelSearchPlugin(final SearchPlugin searchPlugin) {
+    return KernelPluginFactory.createFromObject(searchPlugin, "SearchPlugin");
+  }
+
+  @Bean
   public Kernel kernel(
     final ChatCompletionService chatCompletionService,
     final KernelPlugin kernelSimplePlugin,
     final KernelPlugin kernelLightsPlugin,
-    final KernelPlugin kernelStorePersonalDataPlugin
+    final KernelPlugin kernelStorePersonalDataPlugin,
+    final KernelPlugin kernelSearchPlugin
   ) {
     return Kernel.builder()
       .withAIService(ChatCompletionService.class, chatCompletionService)
       .withPlugin(kernelSimplePlugin)
       .withPlugin(kernelLightsPlugin)
       .withPlugin(kernelStorePersonalDataPlugin)
+      .withPlugin(kernelSearchPlugin)
       .build();
   }
 
@@ -118,4 +127,5 @@ public class AiConfig {
   public RestTemplate restTemplate() {
     return new RestTemplate();
   }
+
 }
